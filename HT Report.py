@@ -9,47 +9,48 @@ import os
 # Small app for creating evaluation reports related to heat treatment processes as quenching, carburising, carbonitriding,
 # nitriding and nitrocarburising in Bodycote company.
 
+
 class AskTypeWindow:
     def __init__(self):
-        self.asktype = tk.Tk()
-        self.asktype.title("HT Report")
-        self.asktype.resizable(width=False, height=False)
+        self.ask_for_type = tk.Tk()
+        self.ask_for_type.title("HT Report")
+        self.ask_for_type.resizable(width=False, height=False)
         self.width = 260
         self.height = 160
-        self.sc_width = self.asktype.winfo_screenwidth()
-        self.sc_height = self.asktype.winfo_screenheight()
+        self.sc_width = self.ask_for_type.winfo_screenwidth()
+        self.sc_height = self.ask_for_type.winfo_screenheight()
         self.x = (self.sc_width/2) - (self.width/2)
         self.y = (self.sc_height/3) - (self.height/3)
-        self.askLabel = tk.Label(self.asktype, text="Choose report type: ", font=("aerial", 10), bg="grey", fg="white")
+        self.askLabel = tk.Label(self.ask_for_type, text="Choose report type: ", font=("aerial", 10), bg="grey", fg="white")
         self.askLabel.grid(row=0, column=1, columnspan=1, sticky="N", ipadx=70)
         self.reporttype = tk.IntVar()
-        self.P1 = tk.Radiobutton(self.asktype, text="Quenching / Annealing", variable=self.reporttype, value=1)
+        self.P1 = tk.Radiobutton(self.ask_for_type, text="Quenching / Annealing", variable=self.reporttype, value=1)
         self.P1.grid(row=1, column=1, ipady=4, ipadx=50, sticky="NE")
-        self.P2 = tk.Radiobutton(self.asktype, text="Carburising / Carbonitriding", variable=self.reporttype, value=2)
+        self.P2 = tk.Radiobutton(self.ask_for_type, text="Carburising / Carbonitriding", variable=self.reporttype, value=2)
         self.P2.grid(row=2, column=1, ipady=4, ipadx=25, sticky="NE")
-        self.P3 = tk.Radiobutton(self.asktype, text="Nitriding / Nitrocarburising", variable=self.reporttype, value=3)
+        self.P3 = tk.Radiobutton(self.ask_for_type, text="Nitriding / Nitrocarburising", variable=self.reporttype, value=3)
         self.P3.grid(row=3, column=1, ipady=4, ipadx=30, sticky="NE")
 
-        self.OKbutton = tk.Button(self.asktype, text="OK", command=self.okey)
-        self.OKbutton.grid(row=4, column=1, rowspan=4, columnspan=4, padx=4, pady=4, ipadx=40)
+        self.OK_button = tk.Button(self.ask_for_type, text="OK", command=self.okey)
+        self.OK_button.grid(row=4, column=1, rowspan=4, columnspan=4, padx=4, pady=4, ipadx=40)
 
-        self.asktype.geometry('%dx%d+%d+%d' % (self.width, self.height, self.x, self.y))
+        self.ask_for_type.geometry('%dx%d+%d+%d' % (self.width, self.height, self.x, self.y))
 
     def ask_type_run(self):
-        self.asktype.mainloop()
+        self.ask_for_type.mainloop()
 
     def okey(self):
         if self.reporttype.get() == 1:
-            self.asktype.destroy()
+            self.ask_for_type.destroy()
             QuenRep = Quenching("Quenching / Annealing Report", 'header_quenching-annealing.png', 430, 'Ret.austenite:', 'nothing')
             QuenRep.run()
         elif self.reporttype.get() == 2:
-            self.asktype.destroy()
+            self.ask_for_type.destroy()
             CarbRep = Carburizing("Carburising / Carbonitriding", 'header_carburising-carbonitriding.png', 290, 'Ret.austenite:',
                                        'Int.oxidation:')
             CarbRep.run()
         elif self.reporttype.get() == 3:
-            self.asktype.destroy()
+            self.ask_for_type.destroy()
             NitRep = Nitriding("Nitriding / Nitrocarburising", 'header_nitriding-nitrocarburising.png', 290, 'CLT:', 'Oxid. layer:')
             NitRep.run()
 
@@ -67,13 +68,13 @@ class BaseView:
 
     other_units = ['nm', 'µm', 'mm', 'cm', '%']
 
-    localaddress = "C:\\Users\\lukas\\python_files\\HT Report\\Archive\\"
-    imgs_address = "C:\\Users\\lukas\\python_files\\HT Report\\imgs\\"
+    localaddress = "C:\\Users\\lukas.rausa.EUROPE\\PycharmProjects\\HT_Report\\Archive\\"
+    imgs_address = "C:C:\\Users\\lukas.rausa.EUROPE\\PycharmProjects\\HT_Report\\imgs\\"
 
     def __init__(self, title, image):
         # Window settings
-        self.cellwidth = int(30)
-        self.cellheight = int(1)
+        self.cell_width = int(30)
+        self.cell_height = int(1)
         self.qcore = tk.Tk()
         self.qcore.geometry("1000x744")
         self.qcore.title(title)
@@ -96,7 +97,7 @@ class BaseView:
         self.bg_image.grid()
         # Date and time
         self.date = datetime.today()
-        self.reportdate = self.date.strftime("%d-%b-%Y")
+        self.report_date = self.date.strftime("%d-%b-%Y")
         self.year = self.date.strftime("%Y")
         # Workspace and Order info
         self.workspace = tk.Frame(self.qcore, width=994, height=130, bg="light grey")
@@ -219,16 +220,15 @@ class Quenching(BaseView):
         self.controller_entry = AutocompleteCombobox(self.results, width=20, completevalues=self.controllers)
         self.controller_entry.grid(row=7, column=1, columnspan=2, padx=10, pady=4, ipady=2, sticky="W")
         # Buttons
-        self.for_buttons = tk.Frame(self.qcore, width=994, height=200, bg="gray60")
-        self.for_buttons.grid(row=4, sticky="NW", pady=1, padx=2)
-        self.for_buttons.columnconfigure(0, weight=3)
-        self.savebutton = tk.Button(self.for_buttons, text="Save report", command=self.get_data, height=2, width=30)
-        self.savebutton.grid(row=0, column=1, columnspan=1, sticky="EW", padx=60)
-        self.print_button = tk.Button(self.for_buttons, text='Print', command=self.print_it, state=tk.DISABLED, height=2, width=30)
+        self.buttons_frame = tk.Frame(self.qcore, width=994, height=200, bg="gray60")
+        self.buttons_frame.grid(row=4, sticky="NW", pady=1, padx=2)
+        self.buttons_frame.columnconfigure(0, weight=3)
+        self.save_button = tk.Button(self.buttons_frame, text="Save report", command=self.get_data, height=2, width=30)
+        self.save_button.grid(row=0, column=1, columnspan=1, sticky="EW", padx=60)
+        self.print_button = tk.Button(self.buttons_frame, text='Print', command=self.print_it, state=tk.DISABLED, height=2, width=30)
         self.print_button.grid(row=0, column=2, columnspan=1, sticky="EW", padx=48)
-        self.delete_button = tk.Button(self.for_buttons, text= 'Reset cells', command=self.clean_cells, height=2, width=30)
+        self.delete_button = tk.Button(self.buttons_frame, text='Reset cells', command=self.clean_cells, height=2, width=30)
         self.delete_button.grid(row=0, column=3, columnspan=1, sticky="EW", padx=60)
-        print(self.sh_iterator)
         # Logical test
         self.sh_test = False
         self.ch_test = False
@@ -331,7 +331,7 @@ class Quenching(BaseView):
             entry2.delete(0, 'end')
             method2.delete(0, 'end')
 
-        if self.ch_test == True:
+        if self.ch_test:
             self.ch_iterator.pop()
             for hard, meth in zip(self.ch_container[1:], self.ch_method_container[1:]):
                 hard.destroy()
@@ -345,7 +345,7 @@ class Quenching(BaseView):
             self.ch_plus.grid(row=2, column=5, padx=10, ipadx=4, pady=2, sticky="W")
             self.ch_test = False
 
-        self.savebutton['state'] = tk.NORMAL
+        self.save_button['state'] = tk.NORMAL
         self.print_button['state'] = tk.DISABLED
         print(self.sh_iterator)
         return self.reportstatus.set(int(0)), self.sh_iterator, self.sh_container, self.sh_method_container, \
@@ -366,19 +366,19 @@ class Quenching(BaseView):
         self.workbook = xlsxwriter.Workbook(str(self.localaddress) + self.year + "\\" + self.customer_entry.get().capitalize() + "\\" +
                                             (self.dispathnote_entry.get()) + "-Report.xlsx")
         self.worksheet_report = self.workbook.add_worksheet("Report")
-        self.filetitle = self.dispathnote_entry.get() + "-Report.xlsx"
+        self.file_title = self.dispathnote_entry.get() + "-Report.xlsx"
         # Setting the sizes of cells
-        self.cellposition = ("A:A", "B:B", "C:C", "D:D", "E:E", "F:F", "G:G", "H:H", "I:I", "J:J", "K:K", "L:L", "M:M", "N:N", "O:O", "P:P", "Q:Q")
-        self.colwidth = (17.29, 3.29, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71)
+        self.cell_position = ("A:A", "B:B", "C:C", "D:D", "E:E", "F:F", "G:G", "H:H", "I:I", "J:J", "K:K", "L:L", "M:M", "N:N", "O:O", "P:P", "Q:Q")
+        self.column_width = (17.29, 3.29, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71)
 
-        for (x, y) in zip(self.cellposition, self.colwidth):
+        for (x, y) in zip(self.cell_position, self.column_width):
             self.worksheet_report.set_column(x, y)
 
-        self.rowheight = (
+        self.row_height = (
             56.25, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 28.5, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
             15, 15, 15, 15, 15, 15, 8.25, 15, 15, 15, 8.25, 15, 15, 15)
 
-        for (r, h) in zip(range(46), self.rowheight):
+        for (r, h) in zip(range(46), self.row_height):
             self.worksheet_report.set_row(r, h)
 
         self.worksheet_report.set_paper(9)
@@ -474,7 +474,7 @@ class Quenching(BaseView):
         self.worksheet_report.merge_range("C10:Q11", self.requirements_entry.get(1.0, "end-1c"), self.value_format_BLR)
         self.worksheet_report.merge_range("A13:Q13", "RESULTS:", self.title_format)
         self.worksheet_report.merge_range("B37:P38", self.notes_entry.get(1.0, "end-1c"), self.value_format)
-        self.worksheet_report.merge_range("B45:F47", self.reportdate, self.base_format_TLB)
+        self.worksheet_report.merge_range("B45:F47", self.report_date, self.base_format_TLB)
         self.worksheet_report.merge_range("L45:Q47", self.controller_entry.get(), self.value_format2)
         self.value_mover = ['B', 'F', 'J', 'N']
         self.method_mover = ['G', 'I', 'O', 'Q']
@@ -502,7 +502,7 @@ class Quenching(BaseView):
             self.worksheet_report.merge_range('D20:E20', self.add_one_methods.get(), self.base_format)
 
         self.workbook.close()
-        self.savebutton['state'] = tk.DISABLED
+        self.save_button['state'] = tk.DISABLED
         self.print_button['state'] = tk.NORMAL
 
 
@@ -733,7 +733,7 @@ class Carburizing(Quenching):
             chd_h.delete(0, 'end')
             chd_d.delete(0, 'end')
 
-        self.savebutton['state'] = tk.NORMAL
+        self.save_button['state'] = tk.NORMAL
         self.print_button['state'] = tk.DISABLED
         return self.reportstatus.set(int(0)), self.sh_iterator, self.sh_container, self.sh_method_container, \
                self.ch_iterator, self.ch_container, self.ch_method_container, self.chd_iterator, self.chd_container, self.chd_depth_container, \
@@ -756,19 +756,19 @@ class Carburizing(Quenching):
         self.workbook = xlsxwriter.Workbook(str(self.localaddress) + self.customer_entry.get().capitalize() + "\\" +
                                             (self.dispathnote_entry.get()) + "-Report.xlsx")
         self.worksheet_report = self.workbook.add_worksheet("Report")
-        self.filetitle = self.dispathnote_entry.get() + "-Report.xlsx"
+        self.file_title = self.dispathnote_entry.get() + "-Report.xlsx"
         # Setting the sizes of cells
-        self.cellposition = ("A:A", "B:B", "C:C", "D:D", "E:E", "F:F", "G:G", "H:H", "I:I", "J:J", "K:K", "L:L", "M:M", "N:N", "O:O", "P:P", "Q:Q")
-        self.colwidth = (17.29, 3.29, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71)
+        self.cell_position = ("A:A", "B:B", "C:C", "D:D", "E:E", "F:F", "G:G", "H:H", "I:I", "J:J", "K:K", "L:L", "M:M", "N:N", "O:O", "P:P", "Q:Q")
+        self.colimn_width = (17.29, 3.29, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71)
 
-        for (x, y) in zip(self.cellposition, self.colwidth):
+        for (x, y) in zip(self.cell_position, self.colimn_width):
             self.worksheet_report.set_column(x, y)
 
-        self.rowheight = (
+        self.row_height = (
             56.25, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 28.5, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
             15, 15, 15, 15, 15, 15, 8.25, 15, 15, 15, 8.25, 15, 15, 15)
 
-        for (r, h) in zip(range(46), self.rowheight):
+        for (r, h) in zip(range(46), self.row_height):
             self.worksheet_report.set_row(r, h)
 
         self.worksheet_report.set_paper(9)
@@ -837,7 +837,7 @@ class Carburizing(Quenching):
             self.worksheet_report.insert_image('F23:Q36', str(self.imgs_address) + self.dispathnote_entry.get() + '.png',
                                                {'x_scale': 0.6, 'y_scale': 0.6, 'x_offset': 4})
         else:
-            return
+            pass
 
         # Formatting cells
         # No Blanks
@@ -872,7 +872,7 @@ class Carburizing(Quenching):
         self.worksheet_report.merge_range("C10:Q11", self.requirements_entry.get(1.0, "end-1c"), self.value_format_BLR)
         self.worksheet_report.merge_range("A13:Q13", "RESULTS:", self.title_format)
         self.worksheet_report.merge_range("B37:P38", self.notes_entry.get(1.0, "end-1c"), self.value_format)
-        self.worksheet_report.merge_range("B45:F47", self.reportdate, self.base_format_TLB)
+        self.worksheet_report.merge_range("B45:F47", self.report_date, self.base_format_TLB)
         self.worksheet_report.merge_range("L45:Q47", self.controller_entry.get(), self.value_format2)
         self.worksheet_report.merge_range("B21:C21", self.ultimate_hardness_entry.get(), self.value_format)
         self.worksheet_report.merge_range("D21:E21", self.layerhardness_methods.get(), self.base_format)
@@ -911,7 +911,7 @@ class Carburizing(Quenching):
             self.worksheet_report.merge_range('D25:E25', self.add_two_methods.get(), self.base_format)
 
         self.workbook.close()
-        self.savebutton['state'] = tk.DISABLED
+        self.save_button['state'] = tk.DISABLED
         self.print_button['state'] = tk.NORMAL
 
 
@@ -965,19 +965,19 @@ class Nitriding(Carburizing):
         self.workbook = xlsxwriter.Workbook(str(self.localaddress) + self.customer_entry.get().capitalize() + "\\" +
                                             (self.dispathnote_entry.get()) + "-Report.xlsx")
         self.worksheet_report = self.workbook.add_worksheet("Report")
-        self.filetitle = self.dispathnote_entry.get() + "-Report.xlsx"
+        self.file_title = self.dispathnote_entry.get() + "-Report.xlsx"
         # Setting the sizes of cells
-        self.cellposition = ("A:A", "B:B", "C:C", "D:D", "E:E", "F:F", "G:G", "H:H", "I:I", "J:J", "K:K", "L:L", "M:M", "N:N", "O:O", "P:P", "Q:Q")
-        self.colwidth = (17.29, 3.29, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71)
+        self.cell_position = ("A:A", "B:B", "C:C", "D:D", "E:E", "F:F", "G:G", "H:H", "I:I", "J:J", "K:K", "L:L", "M:M", "N:N", "O:O", "P:P", "Q:Q")
+        self.column_width = (17.29, 3.29, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71, 3.71)
 
-        for (x, y) in zip(self.cellposition, self.colwidth):
+        for (x, y) in zip(self.cell_position, self.column_width):
             self.worksheet_report.set_column(x, y)
 
-        self.rowheight = (
+        self.row_height = (
             56.25, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 28.5, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
             15, 15, 15, 15, 15, 15, 8.25, 15, 15, 15, 8.25, 15, 15, 15)
 
-        for (r, h) in zip(range(46), self.rowheight):
+        for (r, h) in zip(range(46), self.row_height):
             self.worksheet_report.set_row(r, h)
 
         self.worksheet_report.set_paper(9)
@@ -1081,7 +1081,7 @@ class Nitriding(Carburizing):
         self.worksheet_report.merge_range("C10:Q11", self.requirements_entry.get(1.0, "end-1c"), self.value_format_BLR)
         self.worksheet_report.merge_range("A13:Q13", "RESULTS:", self.title_format)
         self.worksheet_report.merge_range("B37:P38", self.notes_entry.get(1.0, "end-1c"), self.value_format)
-        self.worksheet_report.merge_range("B45:F47", self.reportdate, self.base_format_TLB)
+        self.worksheet_report.merge_range("B45:F47", self.report_date, self.base_format_TLB)
         self.worksheet_report.merge_range("L45:Q47", self.controller_entry.get(), self.value_format2)
         self.worksheet_report.merge_range("B21:C21", self.ultimate_hardness_entry.get(), self.value_format)
         self.worksheet_report.merge_range("D21:E21", self.layerhardness_methods.get(), self.base_format)
@@ -1120,7 +1120,7 @@ class Nitriding(Carburizing):
             self.worksheet_report.merge_range('D25:E25', self.add_two_methods.get(), self.base_format)
 
         self.workbook.close()
-        self.savebutton['state'] = tk.DISABLED
+        self.save_button['state'] = tk.DISABLED
         self.print_button['state'] = tk.NORMAL
 
     def run(self):
