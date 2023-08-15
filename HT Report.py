@@ -11,6 +11,7 @@ import os
 
 
 class AskTypeWindow:
+    """Window for choosing a report type. You can choose from 3 option and hit OK"""
     def __init__(self):
         self.ask_for_type = tk.Tk()
         self.ask_for_type.title("HT Report")
@@ -19,8 +20,8 @@ class AskTypeWindow:
         self.height = 160
         self.sc_width = self.ask_for_type.winfo_screenwidth()
         self.sc_height = self.ask_for_type.winfo_screenheight()
-        self.x = (self.sc_width/2) - (self.width/2)
-        self.y = (self.sc_height/3) - (self.height/3)
+        self.x = (self.sc_width / 2) - (self.width / 2)
+        self.y = (self.sc_height / 3) - (self.height / 3)
         self.askLabel = tk.Label(self.ask_for_type, text="Choose report type: ", font=("aerial", 10), bg="grey", fg="white")
         self.askLabel.grid(row=0, column=1, columnspan=1, sticky="N", ipadx=70)
         self.reporttype = tk.IntVar()
@@ -56,6 +57,8 @@ class AskTypeWindow:
 
 
 class BaseView:
+    """Abstract base class intended for inheritance. There is base settings for window size, addresses and headers."""
+
     methods = ['HRA', 'HRB', 'HRC', 'HRD', 'HRF', 'HRG', 'HR15N', 'HR30N', 'HR45N', 'HR15T', 'HR15T/0.25mm', 'HR15T/0.51mm', 'HR15T/1.02mm',
                'HR30T', 'HR30T/0.51mm', 'HR30T/1.02mm', 'HR45T', 'HR15W', 'HV 0.001', 'HV 0.002', 'HV 0.005', 'HV 0.01', 'HV 0.02', 'HV 0.025',
                'HV 0.05', 'HV 0.1', 'HV 0.2', 'HV 0.25', 'HV 0.3', 'HV 0.5', 'HV 1', 'HV 2', 'HV 2 (UCI)', 'HV 2.5', 'HV 3', 'HV 3 (UCI)',
@@ -69,7 +72,7 @@ class BaseView:
     other_units = ['nm', 'µm', 'mm', 'cm', '%']
 
     localaddress = "C:\\Users\\lukas.rausa.EUROPE\\PycharmProjects\\HT_Report\\Archive\\"
-    imgs_address = "C:C:\\Users\\lukas.rausa.EUROPE\\PycharmProjects\\HT_Report\\imgs\\"
+    imgs_address = "C:\\Users\\lukas.rausa.EUROPE\\PycharmProjects\\HT_Report\\imgs\\"
 
     def __init__(self, title, image):
         # Window settings
@@ -360,8 +363,8 @@ class Quenching(BaseView):
         # Updating databases
         self.updating_database()
         # Creating path
-        if os.path.exists(self.localaddress + self.customer_entry.get().capitalize()) == False:
-            os.mkdir(self.localaddress + self.customer_entry.get().capitalize())
+        if os.path.exists(self.localaddress + self.year + "\\" + self.customer_entry.get().capitalize()) == False:
+            os.mkdir(self.localaddress + self.year + "\\" + self.customer_entry.get().capitalize())
         # Creating of excel file
         self.workbook = xlsxwriter.Workbook(str(self.localaddress) + self.year + "\\" + self.customer_entry.get().capitalize() + "\\" +
                                             (self.dispathnote_entry.get()) + "-Report.xlsx")
@@ -748,12 +751,12 @@ class Carburizing(Quenching):
         # Updating databases
         self.updating_database()
         # Creating path
-        if os.path.exists(self.localaddress + self.customer_entry.get().capitalize()) == False:
-            os.mkdir(self.localaddress + self.customer_entry.get().capitalize())
+        if os.path.exists(self.localaddress + self.year + "\\" + self.customer_entry.get().capitalize()) == False:
+            os.mkdir(self.localaddress + self.year + "\\" + self.customer_entry.get().capitalize())
         # Calculating of CHD layer
         self.calculate_layer(self.layer_name)
         # Creating of excel file
-        self.workbook = xlsxwriter.Workbook(str(self.localaddress) + self.customer_entry.get().capitalize() + "\\" +
+        self.workbook = xlsxwriter.Workbook(str(self.localaddress) + self.year + "\\" + self.customer_entry.get().capitalize() + "\\" +
                                             (self.dispathnote_entry.get()) + "-Report.xlsx")
         self.worksheet_report = self.workbook.add_worksheet("Report")
         self.file_title = self.dispathnote_entry.get() + "-Report.xlsx"
@@ -957,12 +960,12 @@ class Nitriding(Carburizing):
         # Updating databases
         self.updating_database()
         # Creating path
-        if os.path.exists(self.localaddress + self.customer_entry.get().capitalize()) == False:
-            os.mkdir(self.localaddress + self.customer_entry.get().capitalize())
+        if os.path.exists(self.localaddress + self.year + "\\" + self.customer_entry.get().capitalize()) == False:
+            os.mkdir(self.localaddress + self.year + "\\" + self.customer_entry.get().capitalize())
         # Calculating of NHT layer
         self.calculate_layer(self.layer_name)
         # Creating of excel file
-        self.workbook = xlsxwriter.Workbook(str(self.localaddress) + self.customer_entry.get().capitalize() + "\\" +
+        self.workbook = xlsxwriter.Workbook(str(self.localaddress) + self.year + "\\" + self.customer_entry.get().capitalize() + "\\" +
                                             (self.dispathnote_entry.get()) + "-Report.xlsx")
         self.worksheet_report = self.workbook.add_worksheet("Report")
         self.file_title = self.dispathnote_entry.get() + "-Report.xlsx"
